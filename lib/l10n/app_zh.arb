@@ -1,0 +1,12 @@
+{
+  "helloWorld": "zh_Hello World!",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  },
+  "profile": "zh_Profile",
+  "home": "zh_Home",
+  "ratings": "收视率",
+  "search": "搜索",
+  "scan_histories_title": "扫描历史",
+  "scan_histories_filter": "Filter"
+}
