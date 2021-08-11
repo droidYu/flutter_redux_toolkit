@@ -31,6 +31,6 @@ abstract class TodosViewModel
       ..insertTodo = insertActionCreator.doActionCreator(store)
       ..removeTodo = removeActionCreator.doActionCreator(store)
       ..findTodos = findActionCreator.doActionCreator(store)
-      ..todos = ListBuilder(store.state.todoState as Iterable<dynamic>));
+      ..todos = ListBuilder(store.state.todoState?.model as Iterable<dynamic>));
   }
 }
