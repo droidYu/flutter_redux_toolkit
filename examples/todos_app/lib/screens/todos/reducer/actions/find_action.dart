@@ -7,7 +7,8 @@ import 'package:todos_app/services/todos/todos_service.dart';
 //--------------------- Constants
 typedef FindTodosPendingAction = BasePendingAction;
 typedef FindTodosRejectedAction = BaseRejectedAction;
-typedef FindTodosFulfilledAction = BaseFulfilledAction<List<TodoModel>>;
+typedef FindTodosFulfilledAction
+    = BaseFulfilledActionWithResult<List<TodoModel>>;
 
 //--------------------- Actions
 //ASYNC
@@ -17,7 +18,7 @@ final findActionCreator = BaseAsyncActionCreator<AppState, List<TodoModel>>(
   pendingAction: () => FindTodosPendingAction(),
   fulfilledAction: (todos) => FindTodosFulfilledAction(todos),
   rejectedAction: (ex) => FindTodosRejectedAction(ex),
-  action: () => todosService.find(),
+  action: todosService.find,
 );
 
 //--------------------- Action handlers
@@ -25,4 +26,8 @@ final findActionHandler = BaseAsyncActionHandler<
     List<TodoModel>,
     FindTodosFulfilledAction,
     FindTodosRejectedAction,
-    FindTodosPendingAction>();
+    FindTodosPendingAction>(
+  fulfiledFunc: (model, action) {
+    model = action.result;
+    return model;
+});
