@@ -44,10 +44,10 @@ class BaseFulfilledAction<Data> {
   BaseFulfilledAction(this.data);
 }
 
-class BaseFulfilledActionWithParam<Data, Param> {
-  Data data;
+class BaseFulfilledActionWithParam<Result, Param> {
   Param param;
-  BaseFulfilledActionWithParam(this.data, this.param);
+  Result result;
+  BaseFulfilledActionWithParam(this.result, this.param);
 }
 
 class BasePendingAction {
@@ -141,12 +141,12 @@ class BaseActionCreatorNoParam<AppState,Model> {
   void Function() doAction(Store<AppState> store) => () => store.dispatch(action());
 }
 
-class BaseAsyncActionCreator<AppState, Model, Param> {
+class BaseAsyncActionCreator<AppState, Result, Param> {
   BasePendingAction Function() pendingAction;
-  BaseFulfilledActionWithParam<Model, Param> Function(Model, Param) fulfilledAction;
+  BaseFulfilledActionWithParam<Result, Param> Function(Result, Param) fulfilledAction;
   BaseRejectedAction Function(Exception) rejectedAction;
 
-  Future<Model> Function(Param) action;
+  Future<Result> Function(Param) action;
 
   BaseAsyncActionCreator({
     required this.pendingAction,
@@ -161,7 +161,7 @@ class BaseAsyncActionCreator<AppState, Model, Param> {
   ThunkAction<AppState> doAction(Param param) => (Store<AppState> store) async {
         store.dispatch(pendingAction());
         try {
-          final result = await action(param);
+          Result result = await action(param);
           store.dispatch(fulfilledAction(result, param));
         } on Exception catch (_) {
           store.dispatch(rejectedAction(_));
@@ -169,11 +169,12 @@ class BaseAsyncActionCreator<AppState, Model, Param> {
       };
 }
 
-class BaseAsyncActionCreatorNoParam<AppState, Model> {
+
+class BaseAsyncActionCreatorNoParam<AppState, Result> {
   BasePendingAction Function() pendingAction;
-  BaseFulfilledAction<Model> Function(Model) fulfilledAction;
+  BaseFulfilledAction<Result> Function(Result) fulfilledAction;
   BaseRejectedAction Function(Exception) rejectedAction;
-  Future<Model> Function() action;
+  Future<Result> Function() action;
 
   BaseAsyncActionCreatorNoParam(
       {required this.pendingAction,
@@ -187,15 +188,13 @@ class BaseAsyncActionCreatorNoParam<AppState, Model> {
   ThunkAction<AppState> doAction() => (Store<AppState> store) async {
         store.dispatch(pendingAction());
         try {
-          final result = await action();
+          Result result = await action();
           store.dispatch(fulfilledAction(result));
         } on Exception catch (_) {
           store.dispatch(rejectedAction(_));
         }
       };
 }
-
-
 abstract class BaseRepository<T> {
   Future<List<T>> find();
   Future insert(T t);
