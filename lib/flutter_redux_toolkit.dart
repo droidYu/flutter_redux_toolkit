@@ -96,7 +96,7 @@ class BaseAsyncActionHandler<
     return state.copyWith(
         model: fulfiledFunc != null
             ? fulfiledFunc!(state.model, action)
-            : (action as BaseFulfilledAction<Model>).data);
+            : state.model);
   }
 
   BaseState<Model> rejectedActionHandler(
