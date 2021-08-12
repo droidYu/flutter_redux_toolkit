@@ -44,6 +44,12 @@ class BaseFulfilledAction<Data> {
   BaseFulfilledAction(this.data);
 }
 
+class BaseFulfilledActionWithParam<Data, Param> {
+  Data data;
+  Param param;
+  BaseFulfilledActionWithParam(this.data, this.param);
+}
+
 class BasePendingAction {
   bool isLoading = true;
   BasePendingAction({this.isLoading = true}){}
@@ -137,7 +143,7 @@ class BaseActionCreatorNoParam<AppState,Model> {
 
 class BaseAsyncActionCreator<AppState, Model, Param> {
   BasePendingAction Function() pendingAction;
-  BaseFulfilledAction<Model> Function(Model) fulfilledAction;
+  BaseFulfilledActionWithParam<Model, Param> Function(Model, Param) fulfilledAction;
   BaseRejectedAction Function(Exception) rejectedAction;
 
   Future<Model> Function(Param) action;
@@ -156,7 +162,7 @@ class BaseAsyncActionCreator<AppState, Model, Param> {
         store.dispatch(pendingAction());
         try {
           final result = await action(param);
-          store.dispatch(fulfilledAction(result));
+          store.dispatch(fulfilledAction(result, param));
         } on Exception catch (_) {
           store.dispatch(rejectedAction(_));
         }
