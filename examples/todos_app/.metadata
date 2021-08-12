@@ -7,4 +7,4 @@ version:
   revision: 91f8b6be510093f6ac5ff4ec1e578641a4f7f9b3
   channel: master
 
-project_type: package
+project_type: app
