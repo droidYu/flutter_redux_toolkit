@@ -28,6 +28,6 @@ final removeActionHandler = BaseAsyncActionHandler<
     RemoveTodosFulfilledAction,
     RemoveTodosRejectedAction,
     RemoveTodosPendingAction>(fulfiledFunc: (model, action) {
-  model!.removeWhere((todo) => todo.title == action.data);
+  model!.removeWhere((todo) => todo.title == action.result);
   return model;
 });

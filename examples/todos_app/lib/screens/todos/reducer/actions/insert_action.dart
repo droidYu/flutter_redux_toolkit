@@ -27,6 +27,6 @@ final insertActionHandler = BaseAsyncActionHandler<
     InsertTodosFulfilledAction,
     InsertTodosRejectedAction,
     InsertTodosPendingAction>(fulfiledFunc: (model, action) {
-  model!.add(action.data);
+  model!.add(action.result);
   return model;
 });
