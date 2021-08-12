@@ -46,7 +46,7 @@ class BaseFulfilledAction<Data> {
 
 class BasePendingAction {
   bool isLoading = true;
-  BasePendingAction({this.isLoading = true})
+  BasePendingAction({this.isLoading = true}){}
 }
 
 class BaseRejectedAction {
