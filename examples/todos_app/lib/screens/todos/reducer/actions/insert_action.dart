@@ -6,15 +6,15 @@ import 'package:todos_app/services/todos/todos_service.dart';
 //--------------------- Constants
 typedef InsertTodosPendingAction = BasePendingAction;
 typedef InsertTodosRejectedAction = BaseRejectedAction;
-typedef InsertTodosFulfilledAction = BaseFulfilledAction<TodoModel>;
+typedef InsertTodosFulfilledAction = BaseFulfilledActionWithParam<TodoModel, TodoModel>;
 
 //--------------------- Actions
 //ASYNC
 final serviceLocator = GetIt.instance;
 final todosService = serviceLocator.get<TodosService>();
-final insertActionCreator = BaseAsyncActionCreator<AppState, TodoModel, TodoModel>(
+final insertActionCreator = BaseAsyncActionCreatorWithParam<AppState, TodoModel, TodoModel>(
     pendingAction: () => InsertTodosPendingAction(),
-    fulfilledAction: (todo) => InsertTodosFulfilledAction(todo),
+    fulfilledAction: (result, param) => InsertTodosFulfilledAction(result, param),
     rejectedAction: (ex) => InsertTodosRejectedAction(ex),
     action: (todo) async {
       todosService.insert(todo);

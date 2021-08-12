@@ -13,7 +13,7 @@ typedef FindTodosFulfilledAction = BaseFulfilledAction<List<TodoModel>>;
 //ASYNC
 final serviceLocator = GetIt.instance;
 final todosService = serviceLocator.get<TodosService>();
-final findActionCreator = BaseAsyncActionCreatorNoParam<AppState, List<TodoModel>>(
+final findActionCreator = BaseAsyncActionCreator<AppState, List<TodoModel>>(
   pendingAction: () => FindTodosPendingAction(),
   fulfilledAction: (todos) => FindTodosFulfilledAction(todos),
   rejectedAction: (ex) => FindTodosRejectedAction(ex),

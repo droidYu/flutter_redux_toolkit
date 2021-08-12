@@ -7,15 +7,15 @@ import 'package:todos_app/services/todos/todos_service.dart';
 //--------------------- Constants
 typedef RemoveTodosPendingAction = BasePendingAction;
 typedef RemoveTodosRejectedAction = BaseRejectedAction;
-typedef RemoveTodosFulfilledAction = BaseFulfilledAction<String>;
+typedef RemoveTodosFulfilledAction = BaseFulfilledActionWithParam<String, String>;
 
 //--------------------- Actions
 //ASYNC
 final serviceLocator = GetIt.instance;
 final todosService = serviceLocator.get<TodosService>();
-final removeActionCreator = BaseAsyncActionCreator<AppState, String, String>(
+final removeActionCreator = BaseAsyncActionCreatorWithParam<AppState, String, String>(
   pendingAction: () => RemoveTodosPendingAction(),
-  fulfilledAction: (id) => RemoveTodosFulfilledAction(id),
+  fulfilledAction: (result, param) => RemoveTodosFulfilledAction(result, param),
   rejectedAction: (ex) => RemoveTodosRejectedAction(ex),
   action: (id) async {
     await todosService.remove(id);

@@ -141,14 +141,14 @@ class BaseActionCreatorNoParam<AppState,Model> {
   void Function() doAction(Store<AppState> store) => () => store.dispatch(action());
 }
 
-class BaseAsyncActionCreator<AppState, Result, Param> {
+class BaseAsyncActionCreatorWithParam<AppState, Result, Param> {
   BasePendingAction Function() pendingAction;
   BaseFulfilledActionWithParam<Result, Param> Function(Result, Param) fulfilledAction;
   BaseRejectedAction Function(Exception) rejectedAction;
 
   Future<Result> Function(Param) action;
 
-  BaseAsyncActionCreator({
+  BaseAsyncActionCreatorWithParam({
     required this.pendingAction,
     required this.rejectedAction,
     required this.fulfilledAction,
@@ -170,13 +170,13 @@ class BaseAsyncActionCreator<AppState, Result, Param> {
 }
 
 
-class BaseAsyncActionCreatorNoParam<AppState, Result> {
+class BaseAsyncActionCreator<AppState, Result> {
   BasePendingAction Function() pendingAction;
   BaseFulfilledAction<Result> Function(Result) fulfilledAction;
   BaseRejectedAction Function(Exception) rejectedAction;
   Future<Result> Function() action;
 
-  BaseAsyncActionCreatorNoParam(
+  BaseAsyncActionCreator(
       {required this.pendingAction,
       required this.rejectedAction,
       required this.fulfilledAction,
