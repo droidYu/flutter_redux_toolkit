@@ -39,15 +39,16 @@ abstract class BaseListAction<T> {
 }
 
 
-class BaseFulfilledAction<Data> {
-  Data data;
-  BaseFulfilledAction(this.data);
+abstract class BaseFulfilledAction {}
+
+class BaseFulfilledActionWithResult<Result> extends BaseFulfilledAction {
+  Result result;
+  BaseFulfilledActionWithResult(this.result);
 }
 
-class BaseFulfilledActionWithParam<Result, Param> {
+class BaseFulfilledActionWithResultParam<Result, Param> extends BaseFulfilledActionWithResult<Result> {
   Param param;
-  Result result;
-  BaseFulfilledActionWithParam(this.result, this.param);
+  BaseFulfilledActionWithResultParam(Result result, this.param): super(result);
 }
 
 class BasePendingAction {
@@ -84,7 +85,7 @@ class BaseActionHandler<Model, Action> {
 
 class BaseAsyncActionHandler<
     Model,
-    FulfilledAction,
+    FulfilledAction extends BaseFulfilledAction,
     RejectedAction extends BaseRejectedAction,
     PendingAction extends BasePendingAction> {
   Model? Function(Model?, FulfilledAction)? fulfiledFunc;
@@ -143,7 +144,7 @@ class BaseActionCreatorNoParam<AppState,Model> {
 
 class BaseAsyncActionCreatorWithParam<AppState, Result, Param> {
   BasePendingAction Function() pendingAction;
-  BaseFulfilledActionWithParam<Result, Param> Function(Result, Param) fulfilledAction;
+  BaseFulfilledActionWithResultParam<Result, Param> Function(Result, Param) fulfilledAction;
   BaseRejectedAction Function(Exception) rejectedAction;
 
   Future<Result> Function(Param) action;
@@ -172,7 +173,7 @@ class BaseAsyncActionCreatorWithParam<AppState, Result, Param> {
 
 class BaseAsyncActionCreator<AppState, Result> {
   BasePendingAction Function() pendingAction;
-  BaseFulfilledAction<Result> Function(Result) fulfilledAction;
+  BaseFulfilledActionWithResult<Result> Function(Result) fulfilledAction;
   BaseRejectedAction Function(Exception) rejectedAction;
   Future<Result> Function() action;
 
