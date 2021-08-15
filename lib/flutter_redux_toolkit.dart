@@ -128,7 +128,7 @@ class BaseActionCreator<AppState, Model, Param> {
     required this.action,
   });
 
-  void Function(Param) doAction(Store<AppState> store) => (Param param) => store.dispatch(action(param));
+  void Function(Param) doActionCreator(Store<AppState> store) => (Param param) => store.dispatch(action(param));
 }
 
 class BaseActionCreatorNoParam<AppState,Model> {

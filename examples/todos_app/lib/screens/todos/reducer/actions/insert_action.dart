@@ -30,3 +30,13 @@ final insertActionHandler = BaseAsyncActionHandler<
       }
       return model;
     });
+
+
+//TodoModel
+//BOOL 
+
+//INSERT TodoModel
+//TRUE/FALSE
+
+//REQUEST TO SERVER
+//UPDATE REDUX STATE
