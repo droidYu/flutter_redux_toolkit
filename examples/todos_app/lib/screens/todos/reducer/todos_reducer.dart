@@ -7,15 +7,16 @@ import 'package:todos_app/screens/todos/reducer/todos_model.dart';
 
 Reducer<BaseState<List<TodoModel>>> todoReducer =
     combineReducers<BaseState<List<TodoModel>>>([
-  insertActionHandler.fulfilledActionReducer(),
-  insertActionHandler.pendingActionReducer(),
-  insertActionHandler.rejectedActionReducer(),
-
-  removeActionHandler.fulfilledActionReducer(),
-  removeActionHandler.pendingActionReducer(),
-  removeActionHandler.rejectedActionReducer(),
-
-  findActionHandler.fulfilledActionReducer(),
-  findActionHandler.pendingActionReducer(),
-  findActionHandler.rejectedActionReducer(),
+  insertActionHelper.fulfilledActionReducer(),
+  insertActionHelper.pendingActionReducer(),
+  insertActionHelper.rejectedActionReducer(),
+  removeActionHelper.fulfilledActionReducer(),
+  removeActionHelper.pendingActionReducer(),
+  removeActionHelper.rejectedActionReducer(),
+  findActionHelper.fulfilledActionReducer(),
+  findActionHelper.pendingActionReducer(),
+  findActionHelper.rejectedActionReducer(),
+  // ...findActionHelper.reducers(),
+  // ...insertActionHelper.reducers(),
+  // ...removeActionHelper.reducers()
 ]);

@@ -28,9 +28,9 @@ abstract class TodosViewModel
 
   static TodosViewModel fromStore(Store<AppState> store) {
     return TodosViewModel((viewModel) => viewModel
-      ..insertTodo = insertActionCreator.doActionCreator(store)
-      ..removeTodo = removeActionCreator.doActionCreator(store)
-      ..findTodos = findActionCreator.doActionCreator(store)
+      ..insertTodo = insertActionHelper.doActionCreator(store)
+      ..removeTodo = removeActionHelper.doActionCreator(store)
+      ..findTodos = findActionHelper.doActionCreator(store)
       ..todos = ListBuilder(store.state.todoState?.model as Iterable<dynamic>));
   }
 }
