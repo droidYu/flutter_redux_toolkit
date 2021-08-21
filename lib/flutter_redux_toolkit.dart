@@ -3,6 +3,7 @@ library flutter_redux_toolkit;
 export 'base_state.dart';
 export 'base_sync_actions.dart';
 export 'base_async_actions.dart';
+export 'async_actions.dart';
 export 'store_hook_widget.dart';
 
 abstract class BaseRepository<T> {

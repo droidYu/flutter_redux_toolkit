@@ -4,73 +4,28 @@ import 'package:todos_app/redux/app_state.dart';
 import 'package:todos_app/screens/todos/reducer/todos_model.dart';
 import 'package:todos_app/services/todos/todos_service.dart';
 
-//--------------------- Constants
-class InsertTodosPendingAction extends BasePendingAction {}
+class InsertActionResultWrapper {
+  final bool result;
 
-class InsertTodosRejectedAction extends BaseRejectedAction {
-  InsertTodosRejectedAction(Exception ex) : super(ex);
+  InsertActionResultWrapper(this.result);
 }
 
-class InsertTodosFulfilledAction
-    extends BaseFulfilledActionWithResultParam<bool, TodoModel> {
-  InsertTodosFulfilledAction(bool result, TodoModel param)
-      : super(result, param);
-}
-
-// //--------------------- Actions
-// //ASYNC
-// final serviceLocator = GetIt.instance;
-// final todosService = serviceLocator.get<TodosService>();
-// final insertActionCreator =
-//     BaseAsyncActionCreatorWithParam<AppState, bool, TodoModel>(
-//         pendingAction: () => InsertTodosPendingAction(),
-//         fulfilledAction: (result, param) =>
-//             InsertTodosFulfilledAction(result, param),
-//         rejectedAction: (ex) => InsertTodosRejectedAction(ex),
-//         action: todosService.insert);
-
-// //--------------------- Action handlers
-// final insertActionHandler = BaseAsyncActionHandler<
-//     List<TodoModel>,
-//     InsertTodosFulfilledAction,
-//     InsertTodosRejectedAction,
-//     InsertTodosPendingAction>(fulfiledFunc: (model, action) {
-//   if (action.result) {
-//     model!.add(action.param);
-//   }
-//   return model;
-// });
 //--------------------- Action Handlers + Action  Creators
-final insertActionHelper = BaseAsyncActionHelperWithParam<
+final insertActionHelper = AsyncActionHelperWithParam<
     //////Creator
     AppState,
-    bool,
+    InsertActionResultWrapper,
     TodoModel,
     //////Handler
-    List<TodoModel>,
-    InsertTodosFulfilledAction,
-    InsertTodosRejectedAction,
-    InsertTodosPendingAction>(
+    List<TodoModel>>(
   ////////////////////Creator
-  pendingAction: () => InsertTodosPendingAction(),
-  fulfilledAction: (result, param) => InsertTodosFulfilledAction(result, param),
-  rejectedAction: (ex) => InsertTodosRejectedAction(ex),
-  action: GetIt.instance.get<TodosService>().insert,
+  action: (i) async => InsertActionResultWrapper(
+      await GetIt.instance.get<TodosService>().insert(i)),
   ////////////////////Handler
   fulfiledFunc: (model, action) {
-    if (action.result) {
+    if (action.wrapper.result) {
       model!.add(action.param);
     }
     return model;
   },
 );
-
-
-//TodoModel
-//BOOL 
-
-//INSERT TodoModel
-//TRUE/FALSE
-
-//REQUEST TO SERVER
-//UPDATE REDUX STATE
