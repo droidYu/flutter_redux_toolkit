@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'todos_view_model.dart';
+part of 'todos_vm.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -14,6 +14,8 @@ class _$TodosViewModel extends TodosViewModel {
   @override
   final void Function(TodoModel) insertTodo;
   @override
+  final void Function(TodoModel) updateTodo;
+  @override
   final void Function(String) removeTodo;
 
   factory _$TodosViewModel([void Function(TodosViewModelBuilder)? updates]) =>
@@ -23,6 +25,7 @@ class _$TodosViewModel extends TodosViewModel {
       {required this.todos,
       required this.findTodos,
       required this.insertTodo,
+      required this.updateTodo,
       required this.removeTodo})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(todos, 'TodosViewModel', 'todos');
@@ -30,6 +33,8 @@ class _$TodosViewModel extends TodosViewModel {
         findTodos, 'TodosViewModel', 'findTodos');
     BuiltValueNullFieldError.checkNotNull(
         insertTodo, 'TodosViewModel', 'insertTodo');
+    BuiltValueNullFieldError.checkNotNull(
+        updateTodo, 'TodosViewModel', 'updateTodo');
     BuiltValueNullFieldError.checkNotNull(
         removeTodo, 'TodosViewModel', 'removeTodo');
   }
@@ -59,6 +64,7 @@ class _$TodosViewModel extends TodosViewModel {
           ..add('todos', todos)
           ..add('findTodos', findTodos)
           ..add('insertTodo', insertTodo)
+          ..add('updateTodo', updateTodo)
           ..add('removeTodo', removeTodo))
         .toString();
   }
@@ -82,6 +88,11 @@ class TodosViewModelBuilder
   set insertTodo(void Function(TodoModel)? insertTodo) =>
       _$this._insertTodo = insertTodo;
 
+  void Function(TodoModel)? _updateTodo;
+  void Function(TodoModel)? get updateTodo => _$this._updateTodo;
+  set updateTodo(void Function(TodoModel)? updateTodo) =>
+      _$this._updateTodo = updateTodo;
+
   void Function(String)? _removeTodo;
   void Function(String)? get removeTodo => _$this._removeTodo;
   set removeTodo(void Function(String)? removeTodo) =>
@@ -95,6 +106,7 @@ class TodosViewModelBuilder
       _todos = $v.todos.toBuilder();
       _findTodos = $v.findTodos;
       _insertTodo = $v.insertTodo;
+      _updateTodo = $v.updateTodo;
       _removeTodo = $v.removeTodo;
       _$v = null;
     }
@@ -123,6 +135,8 @@ class TodosViewModelBuilder
                   findTodos, 'TodosViewModel', 'findTodos'),
               insertTodo: BuiltValueNullFieldError.checkNotNull(
                   insertTodo, 'TodosViewModel', 'insertTodo'),
+              updateTodo: BuiltValueNullFieldError.checkNotNull(
+                  updateTodo, 'TodosViewModel', 'updateTodo'),
               removeTodo: BuiltValueNullFieldError.checkNotNull(
                   removeTodo, 'TodosViewModel', 'removeTodo'));
     } catch (_) {

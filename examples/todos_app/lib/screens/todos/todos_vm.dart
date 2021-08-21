@@ -5,9 +5,10 @@ import 'package:redux/redux.dart';
 import 'package:todos_app/screens/todos/reducer/actions/find_action.dart';
 import 'package:todos_app/screens/todos/reducer/actions/insert_action.dart';
 import 'package:todos_app/screens/todos/reducer/actions/remove_action.dart';
+import 'package:todos_app/screens/todos/reducer/actions/update_action.dart';
 import 'package:todos_app/screens/todos/reducer/todos_model.dart';
 
-part 'todos_view_model.g.dart';
+part 'todos_vm.g.dart';
 
 abstract class TodosViewModel
     implements Built<TodosViewModel, TodosViewModelBuilder> {
@@ -18,6 +19,9 @@ abstract class TodosViewModel
 
   @BuiltValueField(compare: false)
   void Function(TodoModel) get insertTodo;
+
+  @BuiltValueField(compare: false)
+  void Function(TodoModel) get updateTodo;
 
   @BuiltValueField(compare: false)
   void Function(String) get removeTodo;
@@ -31,6 +35,7 @@ abstract class TodosViewModel
       ..insertTodo = insertActionHelper.doActionCreator(store)
       ..removeTodo = removeActionHelper.doActionCreator(store)
       ..findTodos = findActionHelper.doActionCreator(store)
+      ..updateTodo = updateActionHelper.doActionCreator(store)
       ..todos = ListBuilder(store.state.todoState?.model as Iterable<dynamic>));
   }
 }

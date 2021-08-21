@@ -1,11 +1,7 @@
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
-import 'base_sync_actions.dart';
-import 'base_state.dart';
-
-export 'base_state.dart';
-export 'base_sync_actions.dart';
+import 'package:flutter_redux_toolkit/new/state.dart';
 
 abstract class FulfilledAction {}
 
@@ -40,39 +36,40 @@ class AsyncActionHelper<AppState, ResultWrapper, Model> {
 
   AsyncActionHelper({required this.action, this.fulfiledFunc});
 
-  BaseState<Model> fulfilledActionHandler(
-      BaseState<Model> state, FulfilledActionWithResult<ResultWrapper> action) {
+  State<Model> fulfilledActionHandler(
+      State<Model> state, FulfilledActionWithResult<ResultWrapper> action) {
     return state.copyWith(
         model: fulfiledFunc != null
             ? fulfiledFunc!(state.model, action)
             : state.model);
   }
 
-  BaseState<Model> rejectedActionHandler(
-      BaseState<Model> state, RejectedAction<ResultWrapper> action) {
+  State<Model> rejectedActionHandler(
+      State<Model> state, RejectedAction<ResultWrapper> action) {
     return state.copyWith(isLoading: false);
   }
 
-  BaseState<Model> pendingActionHandler(
-      BaseState<Model> state, PendingAction<ResultWrapper> action) {
+  State<Model> pendingActionHandler(
+      State<Model> state, PendingAction<ResultWrapper> action) {
     return state.copyWith(isLoading: true);
   }
 
-  TypedReducer<BaseState<Model>, FulfilledActionWithResult<ResultWrapper>>
-      fulfilledActionReducer() => TypedReducer<BaseState<Model>,
-          FulfilledActionWithResult<ResultWrapper>>(fulfilledActionHandler);
+  TypedReducer<State<Model>, FulfilledActionWithResult<ResultWrapper>>
+      fulfilledActionReducer() =>
+          TypedReducer<State<Model>, FulfilledActionWithResult<ResultWrapper>>(
+              fulfilledActionHandler);
 
-  TypedReducer<BaseState<Model>, RejectedAction<ResultWrapper>>
+  TypedReducer<State<Model>, RejectedAction<ResultWrapper>>
       rejectedActionReducer() =>
-          TypedReducer<BaseState<Model>, RejectedAction<ResultWrapper>>(
+          TypedReducer<State<Model>, RejectedAction<ResultWrapper>>(
               rejectedActionHandler);
 
-  TypedReducer<BaseState<Model>, PendingAction<ResultWrapper>>
+  TypedReducer<State<Model>, PendingAction<ResultWrapper>>
       pendingActionReducer() =>
-          TypedReducer<BaseState<Model>, PendingAction<ResultWrapper>>(
+          TypedReducer<State<Model>, PendingAction<ResultWrapper>>(
               pendingActionHandler);
 
-  Iterable<dynamic> reducers() => [
+  Iterable<State<Model> Function(State<Model>, dynamic)> reducers() => [
         fulfilledActionReducer(),
         rejectedActionReducer(),
         pendingActionReducer()
@@ -111,7 +108,7 @@ class AsyncActionHelperWithParam<AppState, ResultWrapper, Param, Model> {
 
   AsyncActionHelperWithParam({required this.action, this.fulfiledFunc});
 
-  BaseState<Model> fulfilledActionHandler(BaseState<Model> state,
+  State<Model> fulfilledActionHandler(State<Model> state,
       FulfilledActionWithResultParam<ResultWrapper, Param> action) {
     return state.copyWith(
         model: fulfiledFunc != null
@@ -119,33 +116,33 @@ class AsyncActionHelperWithParam<AppState, ResultWrapper, Param, Model> {
             : state.model);
   }
 
-  BaseState<Model> rejectedActionHandler(
-      BaseState<Model> state, RejectedAction<ResultWrapper> action) {
+  State<Model> rejectedActionHandler(
+      State<Model> state, RejectedAction<ResultWrapper> action) {
     return state.copyWith(isLoading: false);
   }
 
-  BaseState<Model> pendingActionHandler(
-      BaseState<Model> state, PendingAction<ResultWrapper> action) {
+  State<Model> pendingActionHandler(
+      State<Model> state, PendingAction<ResultWrapper> action) {
     return state.copyWith(isLoading: true);
   }
 
-  TypedReducer<BaseState<Model>,
+  TypedReducer<State<Model>,
           FulfilledActionWithResultParam<ResultWrapper, Param>>
-      fulfilledActionReducer() => TypedReducer<BaseState<Model>,
+      fulfilledActionReducer() => TypedReducer<State<Model>,
               FulfilledActionWithResultParam<ResultWrapper, Param>>(
           fulfilledActionHandler);
 
-  TypedReducer<BaseState<Model>, RejectedAction<ResultWrapper>>
+  TypedReducer<State<Model>, RejectedAction<ResultWrapper>>
       rejectedActionReducer() =>
-          TypedReducer<BaseState<Model>, RejectedAction<ResultWrapper>>(
+          TypedReducer<State<Model>, RejectedAction<ResultWrapper>>(
               rejectedActionHandler);
 
-  TypedReducer<BaseState<Model>, PendingAction<ResultWrapper>>
+  TypedReducer<State<Model>, PendingAction<ResultWrapper>>
       pendingActionReducer() =>
-          TypedReducer<BaseState<Model>, PendingAction<ResultWrapper>>(
+          TypedReducer<State<Model>, PendingAction<ResultWrapper>>(
               pendingActionHandler);
 
-  Iterable<TypedReducer<BaseState<Model>, dynamic>> reducers() => [
+  Iterable<State<Model> Function(State<Model>, dynamic)> reducers() => [
         fulfilledActionReducer(),
         rejectedActionReducer(),
         pendingActionReducer()

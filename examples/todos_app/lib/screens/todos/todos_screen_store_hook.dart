@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux_toolkit/store_hook_widget.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todos_app/redux/app_state.dart';
 import 'package:todos_app/screens/todos/reducer/todos_model.dart';
+import 'package:uuid/uuid.dart';
 import 'widgets/todo_row.dart';
-import 'todos_view_model.dart';
+import 'todos_vm.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class TodosScreenWidgetStoreContentHook
@@ -29,6 +31,20 @@ class TodosScreenWidgetStoreContentHook
     Function(String, String) addTodoItem = (String title, String description) {
       clearTextFields();
       vm.insertTodo(TodoModel.create(title, description));
+    };
+
+    // ignore: prefer_function_declarations_over_variables
+    Function(String, String, String) updateTodoItem = (
+      String id,
+      String title,
+      String description,
+    ) {
+      //clearTextFields();
+      final todo = (vm.todos.where((p0) => p0.id == id).first.toBuilder()
+            ..title = title
+            ..description = description)
+          .build();
+      vm.updateTodo(todo);
     };
 
     // ignore: prefer_function_declarations_over_variables
@@ -61,13 +77,13 @@ class TodosScreenWidgetStoreContentHook
 
     // Generate a single item widget
     // ignore: prefer_function_declarations_over_variables
-    Function showModifyTodoDialog = (BuildContext context) async {
+    Function addNewItemDialog = (BuildContext context) async {
       clearTextFields();
       return showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Add a task to your list'),
+              title: const Text('Add new todo item'),
               content: SingleChildScrollView(
                 child: ListBody(
                   children: <Widget>[
@@ -102,26 +118,99 @@ class TodosScreenWidgetStoreContentHook
             );
           });
     };
+
+    // ignore: prefer_function_declarations_over_variables
+    Function modifyItemDialog = (BuildContext context, TodoModel item) async {
+      clearTextFields();
+      final titleCtrl = TextEditingController(text: item.title);
+      final descCtrl = TextEditingController(text: item.description);
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Update todo item'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    TextField(
+                      controller: titleCtrl,
+                    ),
+                    TextField(
+                      controller: descCtrl,
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Update'),
+                  onPressed: () {
+                    updateTodoItem(item.id, titleCtrl.text, descCtrl.text);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text('CANCEL'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    };
     return MaterialApp(
-        title: "Todo list",
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text("Todo list"),
-          ),
-          floatingActionButton: FloatingActionButton(
-              onPressed: () => showModifyTodoDialog(context),
-              tooltip: 'Add Item',
-              child: const Icon(Icons.add)),
-          body: ListView.builder(
-              itemCount: vm.todos.length,
-              itemBuilder: (context, index) {
-                final todo = vm.todos[index];
-                final todoRow = TodoRow(todo.title, todo.description);
-                return ListTile(
+      title: "Todo list",
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("Todo list"),
+        ),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () => addNewItemDialog(context),
+            tooltip: 'Add Item',
+            child: const Icon(Icons.add)),
+        body: ListView.builder(
+            itemCount: vm.todos.length,
+            itemBuilder: (context, index) {
+              final todo = vm.todos[index];
+              final todoRow = TodoRow(todo.title, todo.description);
+
+              return Slidable(
+                actionPane: const SlidableDrawerActionPane(),
+                actionExtentRatio: 0.25,
+                child: Container(
+                  color: Colors.white,
+                  child: ListTile(
                     title: todoRow.buildTitle(context),
-                    onTap: () => promptRemoveTodoItem(index),
-                    subtitle: todoRow.buildSubtitle(context));
-              }),
-        ));
+                    subtitle: todoRow.buildSubtitle(context),
+                    onTap: () {
+                      promptRemoveTodoItem(index);
+                    },
+                  ),
+                ),
+                actions: <Widget>[
+                  IconSlideAction(
+                    //caption: 'Archive',
+                    color: Colors.blue,
+                    icon: Icons.edit,
+                    onTap: () {
+                      modifyItemDialog(context, todo);
+                    },
+                  ),
+                ],
+                secondaryActions: <Widget>[
+                  IconSlideAction(
+                    //caption: 'Delete',
+                    color: Colors.green,
+                    icon: Icons.check,
+                    onTap: () {
+                      promptRemoveTodoItem(index);
+                    },
+                  ),
+                ],
+              );
+            }),
+      ),
+    );
   }
 }

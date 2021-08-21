@@ -4,11 +4,11 @@ import 'package:todos_app/screens/todos/reducer/todos_model.dart';
 
 @immutable
 class AppState {
-  final BaseState<List<TodoModel>>? todoState;
+  final State<List<TodoModel>>? todoState;
   const AppState({
     required this.todoState,
   });
-  factory AppState.initial() => AppState(
-        todoState: BaseState<List<TodoModel>>.initial(const []),
+  factory AppState.init() => AppState(
+        todoState: State<List<TodoModel>>.init(const []),
       );
 }
