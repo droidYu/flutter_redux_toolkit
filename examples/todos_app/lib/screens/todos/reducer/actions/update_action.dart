@@ -4,27 +4,33 @@ import 'package:todos_app/redux/app_state.dart';
 import 'package:todos_app/screens/todos/reducer/todos_model.dart';
 import 'package:todos_app/services/todos/todos_service.dart';
 
-class InsertActionResultWrapper {
+class UpdateActionResultWrapper {
   final bool result;
 
-  InsertActionResultWrapper(this.result);
+  UpdateActionResultWrapper(this.result);
 }
 
 //--------------------- Action Handlers + Action  Creators
-final insertActionHelper = AsyncActionHelperWithParam<
+final updateActionHelper = AsyncActionHelperWithParam<
     //////Creator
     AppState,
-    InsertActionResultWrapper,
+    UpdateActionResultWrapper,
     TodoModel,
     //////Handler
     List<TodoModel>>(
   ////////////////////Creator
-  action: (i) async => InsertActionResultWrapper(
-      await GetIt.instance.get<TodosService>().insert(i)),
+  action: (i) async => UpdateActionResultWrapper(
+      await GetIt.instance.get<TodosService>().update(i)),
   ////////////////////Handler
   fulfiledFunc: (model, action) {
     if (action.wrapper.result) {
-      model!.add(action.param);
+      final updated = action.param;
+      var index = model!.indexWhere((itm) => itm.id == updated.id);
+      model[index] = (model[index].toBuilder()
+            ..title = updated.title
+            ..description = updated.description
+            ..marked = updated.marked)
+          .build();
     }
     return model;
   },

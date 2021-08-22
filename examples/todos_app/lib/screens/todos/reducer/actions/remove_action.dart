@@ -5,30 +5,26 @@ import 'package:todos_app/screens/todos/reducer/todos_model.dart';
 import 'package:todos_app/services/todos/todos_service.dart';
 
 //--------------------- Constants
-typedef RemoveTodosPendingAction = BasePendingAction;
-typedef RemoveTodosRejectedAction = BaseRejectedAction;
-typedef RemoveTodosFulfilledAction
-    = BaseFulfilledActionWithResultParam<bool, String>;
+class RemoveActionResultWrapper {
+  final bool result;
 
-//--------------------- Actions
-//ASYNC
-final serviceLocator = GetIt.instance;
-final todosService = serviceLocator.get<TodosService>();
-final removeActionCreator =
-    BaseAsyncActionCreatorWithParam<AppState, bool, String>(
-  pendingAction: () => RemoveTodosPendingAction(),
-  fulfilledAction: (result, param) => RemoveTodosFulfilledAction(result, param),
-  rejectedAction: (ex) => RemoveTodosRejectedAction(ex),
-  action: todosService.remove,
+  RemoveActionResultWrapper(this.result);
+}
+
+final removeActionHelper = AsyncActionHelperWithParam<
+    //////Creator
+    AppState,
+    RemoveActionResultWrapper,
+    String,
+    List<TodoModel>>(
+  ////////////////////Creator
+  action: (id) async => RemoveActionResultWrapper(
+      await GetIt.instance.get<TodosService>().remove(id)),
+  ////////////////////Handler
+  fulfiledFunc: (model, action) {
+    if (action.wrapper.result) {
+      model = model!.where((element) => element.id != action.param).toList();
+    }
+    return model;
+  },
 );
-
-final removeActionHandler = BaseAsyncActionHandler<
-    List<TodoModel>,
-    RemoveTodosFulfilledAction,
-    RemoveTodosRejectedAction,
-    RemoveTodosPendingAction>(fulfiledFunc: (model, action) {
-  if (action.result) {
-    model = model!.where((element) => element.id != action.param).toList();
-  }
-  return model;
-});

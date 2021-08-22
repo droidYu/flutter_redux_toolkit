@@ -11,7 +11,7 @@ Store<AppState> configureStore() {
   final store = Store<AppState>(
     appStateReducer,
   /* Function defined in the reducers file */
-  initialState: AppState.initial(),
+  initialState: AppState.init(),
     middleware: [
       thunkMiddleware
     ],

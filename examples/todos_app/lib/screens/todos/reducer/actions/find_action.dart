@@ -4,30 +4,26 @@ import 'package:todos_app/redux/app_state.dart';
 import 'package:todos_app/screens/todos/reducer/todos_model.dart';
 import 'package:todos_app/services/todos/todos_service.dart';
 
-//--------------------- Constants
-typedef FindTodosPendingAction = BasePendingAction;
-typedef FindTodosRejectedAction = BaseRejectedAction;
-typedef FindTodosFulfilledAction
-    = BaseFulfilledActionWithResult<List<TodoModel>>;
+class FindActionResultWrapper {
+  final List<TodoModel> result;
 
-//--------------------- Actions
-//ASYNC
-final serviceLocator = GetIt.instance;
-final todosService = serviceLocator.get<TodosService>();
-final findActionCreator = BaseAsyncActionCreator<AppState, List<TodoModel>>(
-  pendingAction: () => FindTodosPendingAction(),
-  fulfilledAction: (todos) => FindTodosFulfilledAction(todos),
-  rejectedAction: (ex) => FindTodosRejectedAction(ex),
-  action: todosService.find,
-);
+  FindActionResultWrapper(this.result);
+}
 
-//--------------------- Action handlers
-final findActionHandler = BaseAsyncActionHandler<
-    List<TodoModel>,
-    FindTodosFulfilledAction,
-    FindTodosRejectedAction,
-    FindTodosPendingAction>(
+//--------------------- Action Handlers + Action  Creators
+final findActionHelper = AsyncActionHelper<
+    //////Creator
+    AppState,
+    FindActionResultWrapper,
+    //////Handler
+    List<TodoModel>>(
+  ////////////////////Creator
+
+  action: () async =>
+      FindActionResultWrapper(await GetIt.instance.get<TodosService>().find()),
+  ////////////////////Handler
   fulfiledFunc: (model, action) {
-    model = action.result;
+    model = action.wrapper.result;
     return model;
-});
+  },
+);
