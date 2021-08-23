@@ -48,7 +48,7 @@ class ActionCreatorNoParam<AppState, Model> {
 ////////////////////////////////////////////////////////////////
 
 //BaseActionHelper = BaseActionHandler + BaseActionCreatorNoParam
-class ActionHelper<AppState, Model, CustomAction> {
+class ActionHelper<AppState, CustomAction, Model> {
   Model? Function(Model?, CustomAction)? actionHandlerFunc;
 
   Action<Model> Function() action;
@@ -70,7 +70,7 @@ class ActionHelper<AppState, Model, CustomAction> {
 }
 
 //BaseActionHelperWithParam = BaseActionHandler + BaseActionCreator
-class ActionHelperWithParam<AppState, Model, CustomAction, Param> {
+class ActionHelperWithParam<AppState, CustomAction, Param, Model> {
   Model? Function(Model?, CustomAction)? actionHandlerFunc;
 
   Action Function(Param) action;
