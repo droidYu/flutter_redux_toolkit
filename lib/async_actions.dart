@@ -1,7 +1,6 @@
+import 'package:flutter_redux_toolkit/state.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-
-import 'package:flutter_redux_toolkit/new/state.dart';
 
 abstract class FulfilledAction {}
 

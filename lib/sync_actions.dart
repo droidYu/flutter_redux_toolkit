@@ -1,4 +1,4 @@
-import 'package:flutter_redux_toolkit/new/state.dart';
+import 'package:flutter_redux_toolkit/state.dart';
 import 'package:redux/redux.dart';
 
 class Action<Data> {
